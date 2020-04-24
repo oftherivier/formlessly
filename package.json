@@ -1,0 +1,42 @@
+{
+  "name": "formlessly",
+  "version": "1.0.0",
+  "main": "dist/cjs/index.js",
+  "author": "chrisvdm <nymanchristine@gmail.com>",
+  "license": "MIT",
+  "oftherivier": {
+    "type": "react",
+    "src": "src/js/index.js",
+    "extensions": [
+      "@oftherivier/ui-tools"
+    ]
+  },
+  "renovate": {
+    "extends": [
+      "github>oftherivier/tools"
+    ]
+  },
+  "scripts": {
+    "build": "otr build",
+    "lint": "otr lint",
+    "format": "otr format",
+    "test": "otr test",
+    "release": "otr release",
+    "start": "otr start",
+    "checks": "yarn lint && yarn test"
+  },
+  "type": "commonjs",
+  "module": "dist/mjs/index.js",
+  "exports": {
+    "import": "dist/mjs/index.js",
+    "require": "dist/cjs/index.js"
+  },
+  "devDependencies": {
+    "@oftherivier/tools": "^0.1.29",
+    "@oftherivier/ui-tools": "^0.1.4",
+    "react": "^16.13.1"
+  },
+  "peerDependencies": {
+    "react": "^15.0.0 || ^16.0.0"
+  }
+}
