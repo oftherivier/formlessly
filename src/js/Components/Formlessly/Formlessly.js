@@ -7,7 +7,7 @@ import { Input } from '../'
 // fieldValues={this.state.formValues}
 // onSubmitSuccess={data => this.onSubmitSuccess(data)}
 
-const Declaform = ({
+const Formlessly = ({
   name,
   fields,
   fieldValues,
@@ -46,4 +46,4 @@ const Declaform = ({
   )
 }
 
-export default Declaform
+export default Formlessly
