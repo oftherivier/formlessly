@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import { Input } from '../'
 
@@ -6,33 +6,33 @@ import { Input } from '../'
 // fields={formFields}
 // fieldValues={this.state.formValues}
 // onSubmitSuccess={data => this.onSubmitSuccess(data)}
+class Formlessly extends Component {
+  constructor (props) {
+    super(props)
 
-const Formlessly = ({
-  name,
-  fields,
-  fieldValues,
-  onSubmitSuccess,
-  onInputChange,
-  children
-}) => {
-  const handleSubmit = e => {
+    this.state = {
+      errors: []
+    }
+  }
+
+  handleSubmit (e) {
     e.preventDefault()
     onSubmitSuccess(fieldValues)
   }
 
-  const onInputValidationFailure = (n, validation) => {
-    console.log('VALIATION FAILURE:')
-    console.log(n, validation)
+  onInputValidationFailure (n, validation) {
+    console.error(n, validation)
   }
 
-  const renderUI = data => {
-    return Object.entries(data).reduce((a, [fieldName, d]) => {
+  renderUI () {
+    const { onInputChange, fieldValues, fields } = this.props
+    return Object.entries(fieldValues).reduce((a, [fieldName, d]) => {
       return Object.assign(
         {
           [fieldName]: (
             <Input
               onInputChange={onInputChange}
-              onInputValidationFailure={onInputValidationFailure}
+              onInputValidationFailure={this.onInputValidationFailure}
               name={fieldName}
               value={d}
               inputKey={`${name}-${fieldName}`}
@@ -45,12 +45,15 @@ const Formlessly = ({
     }, {})
   }
 
-  console.log('render formlessly fields', fields)
-  return (
-    <form onSubmit={e => handleSubmit(e)}>
-      {children({ fields: renderUI(fieldValues) })}
-    </form>
-  )
+  render () {
+    const { children } = this.props
+    console.warn('render formlessly')
+    return (
+      <form onSubmit={e => this.handleSubmit(e)}>
+        {children({ fields: this.renderUI() })}
+      </form>
+    )
+  }
 }
 
 export default Formlessly

@@ -13,8 +13,6 @@ const Input = ({
   onInputValidationFailure,
   ...xArgs
 }) => {
-  console.log('xArgs:', xArgs)
-
   const handleInputChange = v => {
     const validation = validate({
       value: v,
