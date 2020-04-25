@@ -1,1 +1,1 @@
-export { Declaform } from './Components'
+export { Formlessly } from './Components'

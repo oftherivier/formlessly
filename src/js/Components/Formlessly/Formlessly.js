@@ -20,6 +20,11 @@ const Formlessly = ({
     onSubmitSuccess(fieldValues)
   }
 
+  const onInputValidationFailure = (n, validation) => {
+    console.log('VALIATION FAILURE:')
+    console.log(n, validation)
+  }
+
   const renderUI = data => {
     return Object.entries(data).reduce((a, [fieldName, d]) => {
       return Object.assign(
@@ -27,6 +32,7 @@ const Formlessly = ({
           [fieldName]: (
             <Input
               onInputChange={onInputChange}
+              onInputValidationFailure={onInputValidationFailure}
               name={fieldName}
               value={d}
               inputKey={`${name}-${fieldName}`}
@@ -39,6 +45,7 @@ const Formlessly = ({
     }, {})
   }
 
+  console.log('render formlessly fields', fields)
   return (
     <form onSubmit={e => handleSubmit(e)}>
       {children({ fields: renderUI(fieldValues) })}
