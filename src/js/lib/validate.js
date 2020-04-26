@@ -54,10 +54,14 @@ const testMaxLength = (v, max) => {
 }
 
 const testRegex = (str, regex) => {
-  if (regex.startsWith('/') && regex.endsWith('/')) {
+  if (
+    typeof regex === 'string' &&
+    regex.startsWith('/') &&
+    regex.endsWith('/')
+  ) {
     return regex.test(str)
   } else {
-    const newRegex = new RegExp(str)
+    const newRegex = new RegExp(regex)
     return newRegex.test(str)
   }
 }
@@ -82,4 +86,6 @@ const testCustomRegex = (str, regex) => {
 }
 
 // REGULAR EXPRESSIONS
-const emailRegex = new RegExp('/^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/')
+const emailRegex = new RegExp(
+  "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)"
+)

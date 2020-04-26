@@ -11,17 +11,42 @@ class Formlessly extends Component {
     super(props)
 
     this.state = {
-      errors: []
+      errors: {}
     }
+
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleInputValidationFailure = this.handleInputValidationFailure.bind(
+      this
+    )
+    this.handleInputValidationSuccess = this.handleInputValidationSuccess.bind(
+      this
+    )
+    this.renderUI = this.renderUI.bind(this)
   }
 
   handleSubmit (e) {
     e.preventDefault()
-    onSubmitSuccess(fieldValues)
+    this.props.onSubmitSuccess(this.props.fieldValues)
   }
 
-  onInputValidationFailure (n, validation) {
-    console.error(n, validation)
+  handleInputValidationFailure (field, validation) {
+    const { errors } = this.state
+    const newErrors = { ...errors }
+    newErrors[field] = validation
+    this.setState({ errors: newErrors }, () => {
+      this.props.onFormValidationChange(newErrors)
+    })
+  }
+
+  handleInputValidationSuccess (field) {
+    const { errors } = this.state
+    const newErrors = { ...errors }
+    if (newErrors[field] !== undefined) {
+      delete newErrors[field]
+      this.setState({ errors: newErrors }, () => {
+        this.props.onFormValidationChange(newErrors)
+      })
+    }
   }
 
   renderUI () {
@@ -32,7 +57,8 @@ class Formlessly extends Component {
           [fieldName]: (
             <Input
               onInputChange={onInputChange}
-              onInputValidationFailure={this.onInputValidationFailure}
+              onInputValidationFailure={this.handleInputValidationFailure}
+              onInputValidationSuccess={this.handleInputValidationSuccess}
               name={fieldName}
               value={d}
               inputKey={`${name}-${fieldName}`}

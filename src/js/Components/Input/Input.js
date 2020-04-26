@@ -11,20 +11,22 @@ const Input = ({
   value,
   onInputChange,
   onInputValidationFailure,
+  onInputValidationSuccess,
   ...xArgs
 }) => {
-  const handleInputChange = v => {
+  const handleInputValidation = e => {
+    e.preventDefault()
     const validation = validate({
-      value: v,
+      value: value,
       type: type,
       minLength: xArgs.minLength,
       maxLength: xArgs.maxLength
     })
 
-    if (validation.length === 0) {
-      onInputChange(v, name)
-    } else {
+    if (validation.length > 0) {
       onInputValidationFailure(name, validation)
+    } else {
+      onInputValidationSuccess(name)
     }
   }
 
@@ -36,7 +38,8 @@ const Input = ({
         type={type}
         name={name}
         value={value}
-        onChange={e => handleInputChange(e.target.value)}
+        onChange={e => onInputChange(e.target.value, name)}
+        onBlur={e => handleInputValidation(e)}
       />
     </div>
   )
