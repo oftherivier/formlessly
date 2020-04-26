@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { Input } from '../'
+import { isEmpty, objHasValue } from '~/lib'
 
 // name='sandbox'
 // fields={formFields}
@@ -9,10 +10,6 @@ import { Input } from '../'
 class Formlessly extends Component {
   constructor (props) {
     super(props)
-
-    this.state = {
-      errors: {}
-    }
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputValidationFailure = this.handleInputValidationFailure.bind(
@@ -26,31 +23,45 @@ class Formlessly extends Component {
 
   handleSubmit (e) {
     e.preventDefault()
-    this.props.onSubmitSuccess(this.props.fieldValues)
+    // const { errors } = this.state
+    console.log('submit button clicked')
+    // console.log('======= Submit start =======')
+    // console.log(errors)
+    // console.log(Object.entries(errors).length)
+    // console.log('======== Submit end ========')
+
+    // ERROR: validation stops submit
+    // Are required fields filled
+    // Are filled fields good
+    // this.props.onSubmitSuccess(this.props.fieldValues)
   }
 
   handleInputValidationFailure (field, validation) {
-    const { errors } = this.state
-    const newErrors = { ...errors }
-    newErrors[field] = validation
-    this.setState({ errors: newErrors }, () => {
-      this.props.onFormValidationChange(newErrors)
-    })
+    const { errors } = this.props
+    if (errors !== undefined) {
+      const newErrors = { ...errors }
+      newErrors[field] = validation
+      this.props.onInputValidationChange(newErrors)
+    } else {
+      console.warn('"errors" Object is undefined')
+    }
   }
 
   handleInputValidationSuccess (field) {
-    const { errors } = this.state
-    const newErrors = { ...errors }
-    if (newErrors[field] !== undefined) {
-      delete newErrors[field]
-      this.setState({ errors: newErrors }, () => {
-        this.props.onFormValidationChange(newErrors)
-      })
+    const { errors } = this.props
+    if (errors !== undefined) {
+      const newErrors = { ...errors }
+      if (newErrors[field] !== undefined) {
+        delete newErrors[field]
+        this.props.onInputValidationChange(newErrors)
+      }
+    } else {
+      console.warn('"errors" Object is undefined')
     }
   }
 
   renderUI () {
-    const { onInputChange, fieldValues, fields } = this.props
+    const { onInputChange, fieldValues, fields, errors } = this.props
     return Object.entries(fieldValues).reduce((a, [fieldName, d]) => {
       return Object.assign(
         {
@@ -62,6 +73,9 @@ class Formlessly extends Component {
               name={fieldName}
               value={d}
               inputKey={`${name}-${fieldName}`}
+              invalid={
+                errors !== undefined ? objHasValue(errors[fieldName]) : false
+              }
               {...fields[fieldName]}
             />
           )
@@ -73,9 +87,8 @@ class Formlessly extends Component {
 
   render () {
     const { children } = this.props
-    console.warn('render formlessly')
     return (
-      <form onSubmit={e => this.handleSubmit(e)}>
+      <form onSubmit={e => this.handleSubmit(e)} noValidate>
         {children({ fields: this.renderUI() })}
       </form>
     )

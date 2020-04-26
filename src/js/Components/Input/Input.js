@@ -12,10 +12,10 @@ const Input = ({
   onInputChange,
   onInputValidationFailure,
   onInputValidationSuccess,
+  invalid,
   ...xArgs
 }) => {
   const handleInputValidation = e => {
-    e.preventDefault()
     const validation = validate({
       value: value,
       type: type,
@@ -30,6 +30,7 @@ const Input = ({
     }
   }
 
+  console.log(name, invalid)
   return (
     <div className='formlessly__input-wrapper'>
       <Label name={name}>{label}</Label>
@@ -40,6 +41,7 @@ const Input = ({
         value={value}
         onChange={e => onInputChange(e.target.value, name)}
         onBlur={e => handleInputValidation(e)}
+        invalid={invalid.toString()}
       />
     </div>
   )
