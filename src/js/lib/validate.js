@@ -13,7 +13,7 @@ export const validate = ({
     errors.push({
       type: 'is-required'
     })
-  } else {
+  } else if (!isEmpty(value)) {
     switch (type) {
       case 'text':
         errors.push(testMinLength(value, minLength))

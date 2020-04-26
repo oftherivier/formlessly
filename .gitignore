@@ -3,4 +3,4 @@ node_modules
 yarn-error.log
 dev
 dist
-.todo.swp
+.todo.txt.swp
