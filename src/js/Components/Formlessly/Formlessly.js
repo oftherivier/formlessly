@@ -11,6 +11,11 @@ class Formlessly extends Component {
   constructor (props) {
     super(props)
 
+    this.state = {
+      activeEl: ''
+    }
+
+    this.onElementFocus = this.onElementFocus.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldValidation = this.handleFieldValidation.bind(this)
     this.handleFieldValidationFailure = this.handleFieldValidationFailure.bind(
@@ -24,17 +29,28 @@ class Formlessly extends Component {
     this.validateEverything = this.validateEverything.bind(this)
   }
 
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   if (nextState.activeEl !== this.state.activeEl) {
+  //     return false
+  //   }
+  //   return true
+  // }
+
+  onElementFocus (field) {
+    const prevActiveEl = this.state.activeEl
+    this.setState({ activeEl: field }, () => {
+      if (!isEmpty(prevActiveEl)) {
+        this.handleFieldValidation(prevActiveEl)
+      }
+    })
+  }
+
   handleSubmit (e) {
     const { fields, fieldValues } = this.props
 
     e.preventDefault()
     const validation = this.validateEverything(fields, fieldValues)
-    console.log('submit button clicked')
     console.log('Form validation:', validation)
-    // console.log('======= Submit start =======')
-    // console.log(errors)
-    // console.log(Object.entries(errors).length)
-    // console.log('======== Submit end ========')
 
     // ERROR: validation stops submit
     // Are required fields filled
@@ -55,21 +71,20 @@ class Formlessly extends Component {
 
   handleFieldValidationSuccess (field) {
     const { errors } = this.props
-
     if (errors !== undefined) {
       const newErrors = { ...errors }
       if (newErrors[field] !== undefined) {
         delete newErrors[field]
-        this.props.onFieldValidationChange(newErrors)
+        this.props.onInputValidationChange(newErrors)
       }
     } else {
       console.warn('"errors" Object is undefined')
     }
   }
 
-  handleFieldValidation (field, value) {
+  handleFieldValidation (field) {
     const validation = validate({
-      value: value,
+      value: this.props.fieldValues[field],
       ...this.props.fields[field]
     })
 
@@ -89,7 +104,6 @@ class Formlessly extends Component {
         value: fieldValues[field],
         ...fields[field]
       })
-      console.log(field, validation)
       if (validation.length > 0) {
         errors[field] = validation
       }
@@ -123,9 +137,13 @@ class Formlessly extends Component {
   }
 
   render () {
-    const { children } = this.props
+    const { children, errors } = this.props
     return (
-      <form onSubmit={e => this.handleSubmit(e)} noValidate>
+      <form
+        onSubmit={e => this.handleSubmit(e)}
+        onFocus={e => this.onElementFocus(e.target.name)}
+        noValidate
+      >
         {children({ fields: this.renderUI() })}
       </form>
     )

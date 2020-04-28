@@ -23,7 +23,6 @@ const Input = ({
         name={name}
         value={value}
         onChange={e => onInputChange(e.target.value, name)}
-        onBlur={() => onInputBlur(name, value)}
         invalid={invalid.toString()}
       />
     </div>
