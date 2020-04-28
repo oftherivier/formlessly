@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Input } from '../'
-import { isEmpty, objHasValue, validate } from '~/lib'
+import { isEmpty, objHasValue, validate, objLength } from '~/lib'
 
 // name='sandbox'
 // fields={formFields}
@@ -50,12 +50,9 @@ class Formlessly extends Component {
 
     e.preventDefault()
     const validation = this.validateEverything(fields, fieldValues)
-    console.log('Form validation:', validation)
-
-    // ERROR: validation stops submit
-    // Are required fields filled
-    // Are filled fields good
-    // this.props.onSubmit(this.props.fieldValues)
+    if (objLength(validation) === 0) {
+      this.props.onSubmit(fieldValues)
+    }
   }
 
   handleFieldValidationFailure (field, validation) {

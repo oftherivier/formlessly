@@ -9,3 +9,5 @@ export const isEmpty = value =>
 
 export const objHasValue = obj =>
   obj !== undefined && Object.entries(obj).length > 0
+
+export const objLength = obj => Object.keys(obj).length
