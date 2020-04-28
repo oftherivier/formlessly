@@ -15,6 +15,7 @@ class Formlessly extends Component {
       activeEl: ''
     }
 
+    this.getInputProps = this.getInputProps.bind(this)
     this.onElementFocus = this.onElementFocus.bind(this)
     this.onCustomBtnClick = this.onCustomBtnClick.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -109,24 +110,27 @@ class Formlessly extends Component {
     return errors
   }
 
+  getInputProps (fieldName) {
+    const { onInputChange, errors, fieldValues, fields } = this.props
+    return {
+      onInputChange: onInputChange,
+      name: fieldName,
+      value: fieldValues[fieldName],
+      inputKey: `${name}-${fieldName}`,
+      invalid: (errors !== undefined
+        ? objHasValue(errors[fieldName])
+        : false
+      ).toString(),
+      ...fields[fieldName]
+    }
+  }
+
   renderTemplate () {
-    const { onInputChange, fieldValues, fields, errors } = this.props
-    return Object.entries(fieldValues).reduce((a, [fieldName, d]) => {
+    const { fieldValues } = this.props
+    return Object.entries(fieldValues).reduce((a, [fieldName]) => {
       return Object.assign(
         {
-          [fieldName]: (
-            <Input
-              onInputChange={onInputChange}
-              name={fieldName}
-              value={d}
-              inputKey={`${name}-${fieldName}`}
-              invalid={(errors !== undefined
-                ? objHasValue(errors[fieldName])
-                : false
-              ).toString()}
-              {...fields[fieldName]}
-            />
-          )
+          [fieldName]: <Input {...this.getInputProps(fieldName)} />
         },
         a
       )
@@ -137,55 +141,45 @@ class Formlessly extends Component {
   renderAutoTemplate () {
     const {
       fields,
-      fieldValues,
       name,
       errors,
-      onInputChange,
       submitText = 'Submit',
       cancelText = 'Cancel',
       onCancel
     } = this.props
 
-    const inputUI = Object.entries(fields).map(([fieldName, { ...args }]) => (
-      <Fragment>
-        <Input
-          onInputChange={onInputChange}
-          name={fieldName}
-          value={fieldValues[fieldName]}
-          inputKey={`${name}-${fieldName}`}
-          key={`${name}-${fieldName}`}
-          invalid={(errors !== undefined
-            ? objHasValue(errors[fieldName])
-            : false
-          ).toString()}
-          {...args}
-        />
-        {errors[fieldName] !== undefined && (
-          <ErrorMessage name={fieldName} errors={errors[fieldName]} />
-        )}
-      </Fragment>
-    ))
-    inputUI.push(
-      <input
-        className='formlessly__btn formlessly__btn--submit'
-        type='submit'
-        key={`${name}-submit-btn`}
-        value={submitText}
-      />
-    )
+    const inputUI = Object.entries(fields).map(([fieldName]) => {
+      const inputProps = this.getInputProps(fieldName)
 
-    if (onCancel !== undefined) {
-      inputUI.push(
-        <button
-          className='formlessly__btn formlessly__btn--cancel'
-          onClick={e => this.onCustomBtnClick(e, onCancel)}
-          key={`${name}-cancel-btn`}
-        >
-          {cancelText}
-        </button>
+      return fields[fieldName].customComponent !== undefined ? (
+        fields[fieldName].customComponent(inputProps)
+      ) : (
+        <Fragment key={`${name}-${fieldName}-frag`}>
+          <Input {...inputProps} />
+          {errors[fieldName] !== undefined && (
+            <ErrorMessage name={fieldName} errors={errors[fieldName]} />
+          )}
+        </Fragment>
       )
-    }
+    })
 
+    inputUI.push(
+      <div className='formlessly__btn-container' key={`${name}-btn-container`}>
+        <input
+          className='formlessly__btn formlessly__btn--submit'
+          type='submit'
+          value={submitText}
+        />
+        {onCancel !== undefined && (
+          <button
+            className='formlessly__btn formlessly__btn--cancel'
+            onClick={e => this.onCustomBtnClick(e, onCancel)}
+          >
+            {cancelText}
+          </button>
+        )}
+      </div>
+    )
     return inputUI
   }
 
