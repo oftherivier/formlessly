@@ -110,13 +110,13 @@ class Formlessly extends Component {
           [fieldName]: (
             <Input
               onInputChange={onInputChange}
-              onInputBlur={this.handleFieldValidation}
               name={fieldName}
               value={d}
               inputKey={`${name}-${fieldName}`}
-              invalid={
-                errors !== undefined ? objHasValue(errors[fieldName]) : false
-              }
+              invalid={(errors !== undefined
+                ? objHasValue(errors[fieldName])
+                : false
+              ).toString()}
               {...fields[fieldName]}
             />
           )
@@ -127,7 +127,7 @@ class Formlessly extends Component {
   }
 
   render () {
-    const { children, errors } = this.props
+    const { children } = this.props
     return (
       <form
         onSubmit={e => this.handleSubmit(e)}

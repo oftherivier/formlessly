@@ -2,29 +2,27 @@ import React from 'react'
 
 import Label from './Label'
 
+import InputMapper from './InputMapper'
+
 const Input = ({
   type,
   name,
   label = name,
   value,
-  onInputChange,
-  invalid,
-  required = false
+  required = false,
+  ...args
 }) => {
   return (
     <div className='formlessly__input-wrapper'>
       <Label name={name} required={required}>
         {label}
       </Label>
-      <input
-        className='formlessly__input'
-        data-type='input'
+      <InputMapper
         type={type}
         name={name}
         value={value}
-        onChange={e => onInputChange(e.target.value, name)}
-        invalid={invalid.toString()}
         required={required}
+        {...args}
       />
     </div>
   )
