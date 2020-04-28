@@ -6,7 +6,8 @@ export const validate = ({
   required,
   minLength,
   maxLength,
-  regex = undefined
+  regex = undefined,
+  multiple = false
 }) => {
   const errors = []
   if (required && isEmpty(value)) {
@@ -22,6 +23,12 @@ export const validate = ({
         break
       case 'email':
         errors.push(testEmailStructure(value))
+        break
+      case 'select':
+        if (multiple) {
+          errors.push(testMinLength(value, minLength))
+          errors.push(testMaxLength(value, maxLength))
+        }
         break
       default:
         break
