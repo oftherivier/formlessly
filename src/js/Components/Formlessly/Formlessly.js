@@ -41,9 +41,10 @@ class Formlessly extends Component {
     const { fields, fieldValues } = this.props
     e.preventDefault()
     const validation = this.validateAllFields(fields, fieldValues)
-    console.log('onSubmit Validation:', validation)
     if (objLength(validation) === 0) {
       this.props.onSubmit(fieldValues)
+    } else {
+      this.props.onInputValidationChange(validation)
     }
   }
 
@@ -168,6 +169,7 @@ class Formlessly extends Component {
     const { children } = this.props
     return (
       <form
+        className='formlessly__form'
         onSubmit={e => this.handleSubmit(e)}
         onFocus={e => this.onElementFocus(e.target.name)}
         noValidate
