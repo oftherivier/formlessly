@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
-import { Input } from '../'
+import { Input, ErrorMessage } from '../'
 import { isEmpty, objHasValue, validate, objLength } from '~/lib'
 
 // name='sandbox'
@@ -16,6 +16,7 @@ class Formlessly extends Component {
     }
 
     this.onElementFocus = this.onElementFocus.bind(this)
+    this.onCustomBtnClick = this.onCustomBtnClick.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldValidation = this.handleFieldValidation.bind(this)
     this.handleFieldValidationFailure = this.handleFieldValidationFailure.bind(
@@ -25,7 +26,8 @@ class Formlessly extends Component {
       this
     )
     this.handleFieldValidation = this.handleFieldValidation.bind(this)
-    this.renderUI = this.renderUI.bind(this)
+    this.renderTemplate = this.renderTemplate.bind(this)
+    this.renderAutoTemplate = this.renderAutoTemplate.bind(this)
     this.validateEverything = this.validateEverything.bind(this)
   }
 
@@ -36,6 +38,11 @@ class Formlessly extends Component {
         this.handleFieldValidation(prevActiveEl)
       }
     })
+  }
+
+  onCustomBtnClick (e, fn) {
+    e.preventDefault()
+    fn(e)
   }
 
   handleSubmit (e) {
@@ -102,7 +109,7 @@ class Formlessly extends Component {
     return errors
   }
 
-  renderUI () {
+  renderTemplate () {
     const { onInputChange, fieldValues, fields, errors } = this.props
     return Object.entries(fieldValues).reduce((a, [fieldName, d]) => {
       return Object.assign(
@@ -123,7 +130,63 @@ class Formlessly extends Component {
         },
         a
       )
+      // }
     }, {})
+  }
+
+  renderAutoTemplate () {
+    const {
+      fields,
+      fieldValues,
+      name,
+      errors,
+      onInputChange,
+      submitText = 'Submit',
+      cancelText = 'Cancel',
+      onCancel
+    } = this.props
+
+    const inputUI = Object.entries(fields).map(([fieldName, { ...args }]) => (
+      <Fragment>
+        <Input
+          onInputChange={onInputChange}
+          name={fieldName}
+          value={fieldValues[fieldName]}
+          inputKey={`${name}-${fieldName}`}
+          key={`${name}-${fieldName}`}
+          invalid={(errors !== undefined
+            ? objHasValue(errors[fieldName])
+            : false
+          ).toString()}
+          {...args}
+        />
+        {errors[fieldName] !== undefined && (
+          <ErrorMessage name={fieldName} errors={errors[fieldName]} />
+        )}
+      </Fragment>
+    ))
+    inputUI.push(
+      <input
+        className='formlessly__btn formlessly__btn--submit'
+        type='submit'
+        key={`${name}-submit-btn`}
+        value={submitText}
+      />
+    )
+
+    if (onCancel !== undefined) {
+      inputUI.push(
+        <button
+          className='formlessly__btn formlessly__btn--cancel'
+          onClick={e => this.onCustomBtnClick(e, onCancel)}
+          key={`${name}-cancel-btn`}
+        >
+          {cancelText}
+        </button>
+      )
+    }
+
+    return inputUI
   }
 
   render () {
@@ -134,7 +197,9 @@ class Formlessly extends Component {
         onFocus={e => this.onElementFocus(e.target.name)}
         noValidate
       >
-        {children({ fields: this.renderUI() })}
+        {children !== undefined
+          ? children({ fields: this.renderTemplate() })
+          : this.renderAutoTemplate()}
       </form>
     )
   }
