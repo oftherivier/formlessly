@@ -1,12 +1,9 @@
 import React, { Component, Fragment } from 'react'
 
 import { Input, ErrorMessage } from '../'
+import BtnContainer from './BtnContainer'
 import { isEmpty, objHasValue, validate, objLength } from '~/lib'
 
-// name='sandbox'
-// fields={formFields}
-// fieldValues={this.state.formValues}
-// onSubmitSuccess={data => this.onSubmitSuccess(data)}
 class Formlessly extends Component {
   constructor (props) {
     super(props)
@@ -17,7 +14,6 @@ class Formlessly extends Component {
 
     this.getInputProps = this.getInputProps.bind(this)
     this.onElementFocus = this.onElementFocus.bind(this)
-    this.onCustomBtnClick = this.onCustomBtnClick.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldValidation = this.handleFieldValidation.bind(this)
     this.handleFieldValidationFailure = this.handleFieldValidationFailure.bind(
@@ -29,7 +25,7 @@ class Formlessly extends Component {
     this.handleFieldValidation = this.handleFieldValidation.bind(this)
     this.renderTemplate = this.renderTemplate.bind(this)
     this.renderAutoTemplate = this.renderAutoTemplate.bind(this)
-    this.validateEverything = this.validateEverything.bind(this)
+    this.validateAllFields = this.validateAllFields.bind(this)
   }
 
   onElementFocus (field) {
@@ -41,15 +37,10 @@ class Formlessly extends Component {
     })
   }
 
-  onCustomBtnClick (e, fn) {
-    e.preventDefault()
-    fn(e)
-  }
-
   handleSubmit (e) {
     const { fields, fieldValues } = this.props
     e.preventDefault()
-    const validation = this.validateEverything(fields, fieldValues)
+    const validation = this.validateAllFields(fields, fieldValues)
     console.log('onSubmit Validation:', validation)
     if (objLength(validation) === 0) {
       this.props.onSubmit(fieldValues)
@@ -95,7 +86,7 @@ class Formlessly extends Component {
     })
   }
 
-  validateEverything (fields, fieldValues) {
+  validateAllFields (fields, fieldValues) {
     const errors = {}
     Object.keys(fields).forEach(field => {
       const validation = validate({
@@ -134,7 +125,6 @@ class Formlessly extends Component {
         },
         a
       )
-      // }
     }, {})
   }
 
@@ -143,8 +133,8 @@ class Formlessly extends Component {
       fields,
       name,
       errors,
-      submitText = 'Submit',
-      cancelText = 'Cancel',
+      submitText,
+      cancelText,
       onCancel
     } = this.props
 
@@ -164,21 +154,12 @@ class Formlessly extends Component {
     })
 
     inputUI.push(
-      <div className='formlessly__btn-container' key={`${name}-btn-container`}>
-        <input
-          className='formlessly__btn formlessly__btn--submit'
-          type='submit'
-          value={submitText}
-        />
-        {onCancel !== undefined && (
-          <button
-            className='formlessly__btn formlessly__btn--cancel'
-            onClick={e => this.onCustomBtnClick(e, onCancel)}
-          >
-            {cancelText}
-          </button>
-        )}
-      </div>
+      <BtnContainer
+        key={`${name}-btn-container`}
+        submitText={submitText}
+        cancelText={cancelText}
+        onCancel={onCancel}
+      />
     )
     return inputUI
   }
