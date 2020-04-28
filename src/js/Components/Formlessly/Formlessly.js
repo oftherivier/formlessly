@@ -29,13 +29,6 @@ class Formlessly extends Component {
     this.validateEverything = this.validateEverything.bind(this)
   }
 
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   if (nextState.activeEl !== this.state.activeEl) {
-  //     return false
-  //   }
-  //   return true
-  // }
-
   onElementFocus (field) {
     const prevActiveEl = this.state.activeEl
     this.setState({ activeEl: field }, () => {
@@ -47,9 +40,9 @@ class Formlessly extends Component {
 
   handleSubmit (e) {
     const { fields, fieldValues } = this.props
-
     e.preventDefault()
     const validation = this.validateEverything(fields, fieldValues)
+    console.log('onSubmit Validation:', validation)
     if (objLength(validation) === 0) {
       this.props.onSubmit(fieldValues)
     }

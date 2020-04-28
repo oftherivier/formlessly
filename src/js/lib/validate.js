@@ -3,7 +3,7 @@ import { isEmpty, polishArray } from './'
 export const validate = ({
   value,
   type,
-  required = false,
+  required,
   minLength,
   maxLength,
   regex = undefined

@@ -2,8 +2,6 @@ import React from 'react'
 
 import Label from './Label'
 
-import { validate } from '../../lib'
-
 const Input = ({
   type,
   name,
@@ -11,11 +9,13 @@ const Input = ({
   value,
   onInputChange,
   invalid,
-  onInputBlur
+  required = false
 }) => {
   return (
     <div className='formlessly__input-wrapper'>
-      <Label name={name}>{label}</Label>
+      <Label name={name} required={required}>
+        {label}
+      </Label>
       <input
         className='formlessly__input'
         data-type='input'
@@ -24,6 +24,7 @@ const Input = ({
         value={value}
         onChange={e => onInputChange(e.target.value, name)}
         invalid={invalid.toString()}
+        required={required}
       />
     </div>
   )
