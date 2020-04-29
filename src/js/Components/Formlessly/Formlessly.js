@@ -74,6 +74,7 @@ class Formlessly extends Component {
 
   handleFieldValidation (field) {
     const validation = validate({
+      name: field,
       value: this.props.fieldValues[field],
       ...this.props.fields[field]
     })
@@ -91,6 +92,7 @@ class Formlessly extends Component {
     const errors = {}
     Object.keys(fields).forEach(field => {
       const validation = validate({
+        name: field,
         value: fieldValues[field],
         ...fields[field]
       })
