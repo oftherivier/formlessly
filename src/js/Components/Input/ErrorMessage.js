@@ -5,7 +5,7 @@ const ErrorMessage = ({ name, errors }) =>
     <ul className='formlessly__error-list'>
       {errors.map((error, i) => (
         <li key={`${name}-${i}`} className='formlessly__error-list__item'>
-          <p className='formlessly__error-msg'>{error.type}</p>
+          <p className='formlessly__error-msg'>{error.defaultText}</p>
         </li>
       ))}
     </ul>

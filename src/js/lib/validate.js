@@ -11,13 +11,12 @@ export const validate = ({
   maxLength,
   regex = undefined,
   multiple = false,
-  regexErrorMsg
+  regexErrorMsg,
+  name
 }) => {
   const errors = []
   if (required && isEmpty(value)) {
-    errors.push({
-      type: 'is-required'
-    })
+    errors.push(types.isRequired(name))
   } else if (!isEmpty(value)) {
     switch (type) {
       case 'text':
