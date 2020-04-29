@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { TextInput, TextArea, Select, Radio, Checkbox } from './Types'
+import { TextInput, TextArea, Select, Radio, Checkbox, Range } from './Types'
 
 const InputMapper = ({ type, ...props }) => {
   switch (type) {
@@ -12,6 +12,8 @@ const InputMapper = ({ type, ...props }) => {
       return <Radio {...props} />
     case 'checkbox':
       return <Checkbox {...props} />
+    case 'range':
+      return <Range {...props} />
     default:
       return <TextInput type={type} {...props} />
   }
