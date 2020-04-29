@@ -4,7 +4,9 @@ export const validate = ({
   value,
   type,
   required,
-  minLength,
+  min, // minimum value allowed
+  max, // maximum value allowed
+  minLength, // Amount of selections/text length allowed
   maxLength,
   regex = undefined,
   multiple = false
@@ -34,6 +36,10 @@ export const validate = ({
         errors.push(testMinLength(value, minLength))
         errors.push(testMaxLength(value, maxLength))
         break
+      case 'date':
+        errors.push(testMinDate(value, min))
+        errors.push(testMaxDate(value, max))
+        break
       default:
         break
     }
@@ -59,6 +65,28 @@ const testMaxLength = (v, max) => {
       type: 'max-length-exceeded',
       details: {
         length: v.length
+      }
+    }
+  }
+}
+
+const testMinDate = (v, min) => {
+  if (min !== undefined && v.getTime() < min.getTime()) {
+    return {
+      type: 'min-date',
+      details: {
+        minDate: min
+      }
+    }
+  }
+}
+
+const testMaxDate = (v, max) => {
+  if (max !== undefined && v.getTime() > max.getTime()) {
+    return {
+      type: 'max-date-exceeded',
+      details: {
+        maxDate: max
       }
     }
   }
