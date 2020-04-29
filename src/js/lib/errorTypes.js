@@ -4,6 +4,16 @@ export const types = {
     defaultText: `${name} is a required field.`,
     details: {}
   }),
+  minNum: min => ({
+    type: 'min-value-not-achieved-num',
+    defaultText: `This value may not be lower than ${min}.`,
+    details: {}
+  }),
+  maxNumExceeded: max => ({
+    type: 'max-value-exceeded-num',
+    defaultText: `This value may not be larger than ${max}.`,
+    details: {}
+  }),
   minLengthNotAchievedTxt: (min, details) => ({
     type: 'min-length-not-achieved-txt',
     defaultText: `Must contain at least ${min} characters.`,

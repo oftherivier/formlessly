@@ -41,6 +41,10 @@ export const validate = ({
         errors.push(testMinDate(value, min))
         errors.push(testMaxDate(value, max))
         break
+      case 'number':
+        errors.push(testMinNum(value, min))
+        errors.push(testMaxNum(value, max))
+        break
       default:
         break
     }
@@ -51,7 +55,7 @@ export const validate = ({
 // ABBREVIATIONS
 
 const testMinLength = (v, min, error) => {
-  if (min !== undefined && v.length >= min) {
+  if (min !== undefined && v.length > min) {
     return types[error](min, { length: v.length })
   }
 }
@@ -59,6 +63,18 @@ const testMinLength = (v, min, error) => {
 const testMaxLength = (v, max, error) => {
   if (max !== undefined && v.length > max) {
     return types[error](max, { length: v.length })
+  }
+}
+
+const testMinNum = (v, min) => {
+  if (min !== undefined && v < min) {
+    return types.minNum(min)
+  }
+}
+
+const testMaxNum = (v, max) => {
+  if (max !== undefined && v > max) {
+    return types.maxNumExceeded(max)
   }
 }
 
