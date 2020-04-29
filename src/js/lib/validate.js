@@ -1,4 +1,5 @@
 import { isEmpty, polishArray } from './'
+import { types } from './errorTypes'
 
 export const validate = ({
   value,
@@ -9,7 +10,8 @@ export const validate = ({
   minLength, // Amount of selections/text length allowed
   maxLength,
   regex = undefined,
-  multiple = false
+  multiple = false,
+  regexErrorMsg
 }) => {
   const errors = []
   if (required && isEmpty(value)) {
@@ -19,22 +21,22 @@ export const validate = ({
   } else if (!isEmpty(value)) {
     switch (type) {
       case 'text':
-        errors.push(testMinLength(value, minLength))
-        errors.push(testMaxLength(value, maxLength))
-        errors.push(testCustomRegex(value, regex))
+        errors.push(testMinLength(value, minLength, 'minLengthNotAchievedTxt'))
+        errors.push(testMaxLength(value, maxLength, 'maxLengthExceededTxt'))
+        errors.push(testCustomRegex(value, regex, regexErrorMsg))
         break
       case 'email':
         errors.push(testEmailStructure(value))
         break
       case 'select':
         if (multiple) {
-          errors.push(testMinLength(value, minLength))
-          errors.push(testMaxLength(value, maxLength))
+          errors.push(testMinLength(value, minLength, 'minLengthExceededOpts'))
+          errors.push(testMaxLength(value, maxLength, 'maxLengthExceededOpts'))
         }
         break
       case 'checkbox':
-        errors.push(testMinLength(value, minLength))
-        errors.push(testMaxLength(value, maxLength))
+        errors.push(testMinLength(value, minLength, 'minLengthExceededOpts'))
+        errors.push(testMaxLength(value, maxLength, 'maxLengthExceededOpts'))
         break
       case 'date':
         errors.push(testMinDate(value, min))
@@ -48,47 +50,28 @@ export const validate = ({
 }
 
 // ABBREVIATIONS
-const testMinLength = (v, min) => {
+
+const testMinLength = (v, min, error) => {
   if (min !== undefined && v.length >= min) {
-    return {
-      type: 'min-length-not-achieved',
-      details: {
-        length: v.length
-      }
-    }
+    return types[error](min, { length: v.length })
   }
 }
 
-const testMaxLength = (v, max) => {
+const testMaxLength = (v, max, error) => {
   if (max !== undefined && v.length > max) {
-    return {
-      type: 'max-length-exceeded',
-      details: {
-        length: v.length
-      }
-    }
+    return types[error](max, { length: v.length })
   }
 }
 
 const testMinDate = (v, min) => {
   if (min !== undefined && v.getTime() < min.getTime()) {
-    return {
-      type: 'min-date',
-      details: {
-        minDate: min
-      }
-    }
+    return types.minDate(min, { minDate: min })
   }
 }
 
 const testMaxDate = (v, max) => {
   if (max !== undefined && v.getTime() > max.getTime()) {
-    return {
-      type: 'max-date-exceeded',
-      details: {
-        maxDate: max
-      }
-    }
+    return types.maxDateExceeded(max, { maxDate: max })
   }
 }
 
@@ -107,20 +90,16 @@ const testRegex = (str, regex) => {
 
 const testEmailStructure = value => {
   if (!testRegex(value, emailRegex)) {
-    return {
-      type: 'invalid-email-structure'
-    }
+    return types.invalidEmail()
   }
 }
 
-const testCustomRegex = (str, regex) => {
+const testCustomRegex = (str, regex, regexErrorMsg) => {
   if (!isEmpty(regex) && !testRegex(str, regex)) {
-    return {
-      type: 'custom-regex-test-failure',
-      details: {
-        regularExpression: regex
-      }
-    }
+    return types.customRegexFailure(regexErrorMsg, {
+      regularExpression: regex,
+      value: str
+    })
   }
 }
 
