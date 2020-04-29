@@ -30,6 +30,10 @@ export const validate = ({
           errors.push(testMaxLength(value, maxLength))
         }
         break
+      case 'checkbox':
+        errors.push(testMinLength(value, minLength))
+        errors.push(testMaxLength(value, maxLength))
+        break
       default:
         break
     }
