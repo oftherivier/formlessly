@@ -32,7 +32,7 @@
     "require": "dist/cjs/index.js"
   },
   "devDependencies": {
-    "@oftherivier/tools": "0.1.37",
+    "@oftherivier/tools": "0.1.38",
     "@oftherivier/ui-tools": "0.1.4",
     "react": "16.13.1"
   },
