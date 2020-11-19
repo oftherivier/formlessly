@@ -105,17 +105,22 @@ class Formlessly extends Component {
   }
 
   getInputProps (fieldName) {
-    const { onInputChange, errors, fieldValues, fields } = this.props
+    const {
+      onInputChange,
+      errors = undefined,
+      fieldValues,
+      fields
+    } = this.props
+    const prettyFields = { ...fields[fieldName] }
+    delete prettyFields['customComponent']
+    delete prettyFields['regexErrorMsg']
     return {
       onInputChange: onInputChange,
       name: fieldName,
       value: fieldValues[fieldName],
       inputKey: `${name}-${fieldName}`,
-      invalid: (errors !== undefined
-        ? objHasValue(errors[fieldName])
-        : false
-      ).toString(),
-      ...fields[fieldName]
+      hasError: objHasValue(errors[fieldName]).toString(),
+      ...prettyFields
     }
   }
 
@@ -143,13 +148,14 @@ class Formlessly extends Component {
 
     const inputUI = Object.entries(fields).map(([fieldName]) => {
       const inputProps = this.getInputProps(fieldName)
+      const customComponentInputProps = { ...inputProps }
 
       return fields[fieldName].customComponent !== undefined ? (
         fields[fieldName].customComponent(inputProps)
       ) : (
         <Fragment key={`${name}-${fieldName}-frag`}>
           <Input {...inputProps} />
-          {errors[fieldName] !== undefined && (
+          {inputProps.invalid === 'true' && (
             <ErrorMessage name={fieldName} errors={errors[fieldName]} />
           )}
         </Fragment>
@@ -168,13 +174,14 @@ class Formlessly extends Component {
   }
 
   render () {
-    const { children } = this.props
+    const { children, noValidate = true } = this.props
     return (
       <form
         className='formlessly__form'
         onSubmit={e => this.handleSubmit(e)}
         onFocus={e => this.onElementFocus(e.target.name)}
-        noValidate
+        onBlur={e => this.onElementBlur(e.target.name)}
+        noValidate={noValidate}
       >
         {children !== undefined
           ? children({ fields: this.renderTemplate() })

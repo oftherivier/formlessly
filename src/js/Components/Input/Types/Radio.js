@@ -1,13 +1,10 @@
 import React from 'react'
 
-const Radio = ({ name, onInputChange, value, inputKey, options }) => {
+const Radio = ({ name, onInputChange, value, options }) => {
   return (
     <div className='formlessly__input--radio-wrapper'>
-      {options.map((opts, i) => (
-        <div
-          className='formlessly__input--radio-option'
-          key={`${inputKey}-${i}`}
-        >
+      {options.map(opts => (
+        <div className='formlessly__input--radio-option'>
           <input
             className='formlessly__input--radio-btn'
             type='radio'

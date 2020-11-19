@@ -1,12 +1,11 @@
 import React from 'react'
 
-const Select = ({ name, onInputChange, value, inputKey, options, ...args }) => (
+const Select = ({ name, onInputChange, value, options, ...args }) => (
   <select
     className='formlessly__input--select'
     name={name}
     onChange={e => onInputChange(e.target.value, name)}
     value={value}
-    key={inputKey}
     {...args}
   >
     {options.map(opts => (

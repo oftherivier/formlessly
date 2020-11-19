@@ -180,7 +180,9 @@ When not using the template the error messages are displayed automatically in th
 
 ## Custom components
 
-As mentioned earilier one way of using custom components is by simply adding them to the template. Another way to use your own custom components is by adding them to the `customComponent` prop of the `field` object as a function returning UI.
+As mentioned earlier one way of using custom components is by simply adding them to the template. You still would need to add the field data to the `fields` object so that _formlessly_ knows how to validate the value entered into the custom component.
+
+Another method to use your own custom components is by adding them to the `customComponent` prop of the `field` object as a function returning UI. Unlike when using the template, _formlessly_ will add its own label UI.
 
 ```js
 const formFields = {
@@ -213,5 +215,7 @@ const formFields = {
 ```
 
 ## Styling
+
+With this version of _formlessly_ the styling is as basic as it gets so that you can style the UI the way you want.
 
 ## Regular Expressions

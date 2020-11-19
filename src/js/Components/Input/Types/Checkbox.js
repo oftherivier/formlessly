@@ -1,13 +1,10 @@
 import React from 'react'
 
-const Checkbox = ({ name, onInputChange, value, inputKey, options }) => {
+const Checkbox = ({ name, onInputChange, value, options }) => {
   return (
     <div className='formlessly__input--checkbox-wrapper'>
-      {options.map((opts, i) => (
-        <div
-          className='formlessly__input--checkbox-option'
-          key={`${inputKey}-${i}`}
-        >
+      {options.map(opts => (
+        <div className='formlessly__input--checkbox-option'>
           <input
             className='formlessly__input--checkbox'
             type='checkbox'

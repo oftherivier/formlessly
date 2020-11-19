@@ -1,7 +1,6 @@
 import React from 'react'
 
 const ErrorMessage = ({ name, errors }) => {
-  console.log(errors)
   return errors.length > 1 ? (
     <ul className='formlessly__error-list'>
       {errors.map((error, i) => (

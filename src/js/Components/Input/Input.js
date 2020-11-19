@@ -10,10 +10,11 @@ const Input = ({
   label = name,
   value,
   required = false,
+  inputKey,
   ...args
 }) => {
   return (
-    <div className='formlessly__input-wrapper'>
+    <div className='formlessly__input-wrapper' key={inputKey}>
       <Label name={name} required={required}>
         {label}
       </Label>

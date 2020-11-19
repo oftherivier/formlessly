@@ -1,7 +1,7 @@
 import React from 'react'
 
-const Range = ({ name, onInputChange, inputKey, ...attr }) => (
-  <div className='formlessly__input--range-wrapper' key={inputKey}>
+const Range = ({ name, onInputChange, ...attr }) => (
+  <div className='formlessly__input--range-wrapper'>
     <span className='formlessly__input--range__num'>{attr.min}</span>
     <input
       name={name}
