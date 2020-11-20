@@ -43,7 +43,7 @@ _formlessly_ allows you to create forms using a `fields` obj with or without a U
     {fields.email}
     <ErrorMessage name='email' error={errors.email} />
 
-    <label htmlFor='colour>Favourite colour</label>
+    <label htmlFor='colour'>Favourite colour</label>
     <select
       name='colour'
       onChange={handleInputChange}
@@ -100,7 +100,7 @@ It is possible to generate a form without the use of a template. However there m
 
     {fields.email}
 
-    <label htmlFor='colour>Favourite colour:</label>
+    <label htmlFor='colour'>Favourite colour:</label>
     <select
       name='colour'
       onChange={handleInputChange}
@@ -243,10 +243,11 @@ name: {
 This is a hobby project so not everything will work first time around.
 
 ### Unsupported Input Types
-If you need a particular input type that isn't currently supported then please use _customComponent_.
+I have tried to make provision for html5 form field types however I may have missed something. If you need a particular input type that isn't supported then please use _customComponent_. Also feel free create an issue on Github and I will try to get to it ASAP
 
 ### Coming Up
-
-If you find any bugs or have any questions please make a PR or something
-
 Also if you want a slightly prettier version keep an eye out for _formlessly-pretty_ which will have customised UI
+
+## Thank You!
+
+Thank you for making it this far. If you find any bugs or have any questions please make an issue or something
