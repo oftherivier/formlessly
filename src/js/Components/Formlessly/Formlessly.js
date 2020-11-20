@@ -14,6 +14,7 @@ class Formlessly extends Component {
 
     this.getInputProps = this.getInputProps.bind(this)
     this.onElementFocus = this.onElementFocus.bind(this)
+    this.onElementBlur = this.onElementBlur.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldValidation = this.handleFieldValidation.bind(this)
     this.handleFieldValidationFailure = this.handleFieldValidationFailure.bind(
@@ -26,6 +27,14 @@ class Formlessly extends Component {
     this.renderTemplate = this.renderTemplate.bind(this)
     this.renderAutoTemplate = this.renderAutoTemplate.bind(this)
     this.validateAllFields = this.validateAllFields.bind(this)
+  }
+
+  onElementBlur (e) {
+    const field = e.target.name
+    const focussedEl = e.relatedTarget
+    if (!focussedEl) {
+      this.handleFieldValidation(field)
+    }
   }
 
   onElementFocus (field) {
@@ -119,7 +128,7 @@ class Formlessly extends Component {
       name: fieldName,
       value: fieldValues[fieldName],
       inputKey: `${name}-${fieldName}`,
-      haserror: objHasValue(errors[fieldName]).toString(),
+      invalid: objHasValue(errors[fieldName]).toString(),
       ...prettyFields
     }
   }
@@ -148,7 +157,6 @@ class Formlessly extends Component {
 
     const inputUI = Object.entries(fields).map(([fieldName]) => {
       const inputProps = this.getInputProps(fieldName)
-      // const customComponentInputProps = { ...inputProps }
 
       return fields[fieldName].customComponent !== undefined ? (
         fields[fieldName].customComponent(inputProps)
@@ -180,6 +188,7 @@ class Formlessly extends Component {
         className='formlessly__form'
         onSubmit={e => this.handleSubmit(e)}
         onFocus={e => this.onElementFocus(e.target.name)}
+        onBlur={e => this.onElementBlur(e)}
         noValidate={noValidate}
       >
         {children !== undefined

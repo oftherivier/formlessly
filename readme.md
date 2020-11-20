@@ -178,6 +178,14 @@ fields }) => (
 ```
 When not using the template the error messages are displayed automatically in the form.
 
+Input type elements have a attribute `invalid` that can be used for the purpose of styling.
+
+```
+.formlessly__input--text:invalid {
+  border-color: red;
+}
+```
+
 ## Custom components
 
 As mentioned earlier one way of using custom components is by simply adding them to the template. You still would need to add the field data to the `fields` object so that _formlessly_ knows how to validate the value entered into the custom component.
@@ -219,3 +227,26 @@ const formFields = {
 With this version of _formlessly_ the styling is as basic as it gets so that you can style the UI the way you want.
 
 ## Regular Expressions
+Text fields can be given regular expressions to test strings. A custom error message may be added in the field object to make error handling easier for users.
+
+```
+name: {
+  ...
+  regex: '^D',
+  regexErrorMsg: 'Name must start with the letter "D"',
+  ...
+},
+```
+
+## Notes
+
+This is a hobby project so not everything will work first time around.
+
+### Unsupported Input Types
+If you need a particular input type that isn't currently supported then please use _customComponent_.
+
+### Coming Up
+
+If you find any bugs or have any questions please make a PR or something
+
+Also if you want a slightly prettier version keep an eye out for _formlessly-pretty_ which will have customised UI

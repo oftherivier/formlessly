@@ -4,7 +4,7 @@ import { types } from './errorTypes'
 export const validate = ({
   value,
   type,
-  required,
+  required = false,
   min, // minimum value allowed
   max, // maximum value allowed
   minLength, // Amount of selections/text length allowed
