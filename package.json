@@ -20,9 +20,9 @@
     "build": "otr build",
     "lint": "otr lint",
     "format": "otr format",
-    "test": "otr test",
     "release": "otr release",
     "start": "otr start",
+    "test": ":",
     "checks": "yarn lint && yarn test"
   },
   "type": "commonjs",
