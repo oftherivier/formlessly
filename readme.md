@@ -246,7 +246,7 @@ This is a hobby project so not everything will work first time around.
 I have tried to make provision for html5 form field types however I may have missed something. If you need a particular input type that isn't supported then please use _customComponent_. Also feel free create an issue on Github and I will try to get to it ASAP
 
 ### Coming Up
-Also if you want a slightly prettier version keep an eye out for _formlessly-pretty_ which will have customised UI
+Also if you want a slightly prettier version keep an eye out for _formlessly-pretty_ which will have styled UI
 
 ## Thank You!
 
