@@ -34,9 +34,9 @@
   "devDependencies": {
     "@oftherivier/tools": "0.1.43",
     "@oftherivier/ui-tools": "0.1.4",
-    "react": "16.13.1"
+    "react": "17.0.2"
   },
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0"
+    "react": "^15.0.0 || ^16.0.0 || ^17.0.0"
   }
 }
