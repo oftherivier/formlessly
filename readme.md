@@ -70,15 +70,6 @@ npm i formlessly
 yarn add formlessly
 ```
 
-_formlessly_ can be used in both es-module-aware and commonjs bundlers/environments.
-
-```js
-// es module
-import { int } from 'fictional'
-// commonjs
-const { int } = require('fictional')
-```
-
 ## Usage
 
 _formlessly_ makes use of the `fields` object to render the input fields. Each input object must have a type. The input name is derived from the object key. We recommend using this key as the state name for your input field.
